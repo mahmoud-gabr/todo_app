@@ -116,6 +116,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() {
-   
+    print('Task added');
   }
 }
