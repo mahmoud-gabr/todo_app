@@ -21,6 +21,7 @@ class DefaultTextFormField extends StatelessWidget {
       ),
       maxLines: maxLines,
       validator: validator,
+      style: Theme.of(context).textTheme.titleLarge,
     );
   }
 }

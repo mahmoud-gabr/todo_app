@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/firebase_function.dart';
+import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/deafault_elevated_botton.dart';
 import 'package:todo_app/tabs/tasks/deafult_text_form_field.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
@@ -116,6 +120,23 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() {
-    print('Task added');
+    FirebaseFunctions.addTaskToFirestore(
+      taskModel: TaskModel(
+        title: titleController.text,
+        description: descriptionController.text,
+        date: selectedDate,
+      ),
+    ).timeout(
+      const Duration(microseconds: 500),
+      onTimeout: () {
+        Navigator.of(context).pop();
+        Provider.of<TasksProvider>(context,listen: false).getTasks();
+        print('Task added');
+      },
+    ).catchError(
+      (_) {
+        print('error');
+      },
+    );
   }
 }
