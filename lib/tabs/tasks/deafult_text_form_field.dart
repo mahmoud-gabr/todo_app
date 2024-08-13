@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/app_theme.dart';
 
 class DefaultTextFormField extends StatelessWidget {
   const DefaultTextFormField({
@@ -21,7 +22,10 @@ class DefaultTextFormField extends StatelessWidget {
       ),
       maxLines: maxLines,
       validator: validator,
-      style: Theme.of(context).textTheme.titleLarge,
+      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            color: AppTheme.black,
+            fontWeight: FontWeight.w400,
+          ),
     );
   }
 }

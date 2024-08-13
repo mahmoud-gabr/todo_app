@@ -19,50 +19,48 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: tabs[currentTabIndex],
-        bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 10,
-          padding: EdgeInsets.zero,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: BottomNavigationBar(
-            currentIndex: currentTabIndex,
-            onTap: (index) {
-              currentTabIndex = index;
-              setState(() {});
-            },
-            items: const [
-              BottomNavigationBarItem(
-                label: 'Tasks',
-                icon: Icon(
-                  Icons.list,
-                  size: 34,
-                ),
+    return Scaffold(
+      body: tabs[currentTabIndex],
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 10,
+        padding: EdgeInsets.zero,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: BottomNavigationBar(
+          currentIndex: currentTabIndex,
+          onTap: (index) {
+            currentTabIndex = index;
+            setState(() {});
+          },
+          items: const [
+            BottomNavigationBarItem(
+              label: 'Tasks',
+              icon: Icon(
+                Icons.list,
+                size: 34,
               ),
-              BottomNavigationBarItem(
-                label: 'Settings',
-                icon: Icon(
-                  Icons.settings_outlined,
-                  size: 34,
-                ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Settings',
+              icon: Icon(
+                Icons.settings_outlined,
+                size: 34,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (_) => const AddTaskBottomSheet(),
-          ),
-          child: const Icon(
-            Icons.add,
-            size: 34,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: (_) => const AddTaskBottomSheet(),
+        ),
+        child: const Icon(
+          Icons.add,
+          size: 34,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
