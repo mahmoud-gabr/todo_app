@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 class DefaultTextFormField extends StatelessWidget {
   const DefaultTextFormField({
     super.key,
-    required this.controller,
+     this.controller,
     required this.hintText,
     this.maxLines,
-    this.validator,
+    this.validator, this.intialValue,  this.onChanged,
   });
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final int? maxLines;
   final String? Function(String?)? validator;
+  final String? intialValue;
+  final  Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -19,8 +21,10 @@ class DefaultTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
       ),
+      onChanged: onChanged,
       maxLines: maxLines,
       validator: validator,
+      initialValue: intialValue,
       style: Theme.of(context).textTheme.titleLarge,
     );
   }

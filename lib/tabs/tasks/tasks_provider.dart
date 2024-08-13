@@ -24,4 +24,8 @@ class TasksProvider with ChangeNotifier {
     selectedDate = date;
     notifyListeners();
   }
+
+  Future<TaskModel> getTaskById(String taskId) async {
+    return await FirebaseFunctions.getTaskById(taskId);
+  }
 }
