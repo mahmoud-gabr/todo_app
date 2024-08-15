@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/deafault_elevated_botton.dart';
 import 'package:todo_app/tabs/tasks/deafult_text_form_field.dart';
-import 'package:intl/intl.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
-class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({super.key});
+class EditTaskScreen extends StatefulWidget {
+  static const String routeName = '/editTaskScreen';
+  const EditTaskScreen({super.key});
 
   @override
-  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+  State<EditTaskScreen> createState() => _EditTaskScreenState();
 }
 
-class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+class _EditTaskScreenState extends State<EditTaskScreen> {
   DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  late TaskModel task;
+  late DateTime selectedDate;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * .56,
-      padding: const EdgeInsets.all(20),
-      child: SingleChildScrollView(
+    task = ModalRoute.of(context)?.settings.arguments as TaskModel;
+    selectedDate = task.date;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('To Do List'),
+      ),
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        color: AppTheme.white,
         child: Form(
           key: formKey,
           child: Column(
             children: [
               Text(
-                AppLocalizations.of(context)!.addTask,
+                'Edit task',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppTheme.black,
                     ),
@@ -45,11 +46,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 16,
               ),
               DefaultTextFormField(
-                controller: titleController,
-                hintText: AppLocalizations.of(context)!.enterTitle,
+                hintText: 'Enter task title',
+                intialValue: task.title,
+                onChanged: (value) {
+                  task.title = value;
+                },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'title can not be empty';
+                    return 'Title cannot be empty';
                   } else {
                     return null;
                   }
@@ -59,8 +63,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 16,
               ),
               DefaultTextFormField(
-                controller: descriptionController,
-                hintText: AppLocalizations.of(context)!.enterDesc,
+                hintText: 'Enter task description',
+                intialValue: task.description,
+                onChanged: (value) {
+                  task.description = value;
+                },
                 maxLines: 5,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -74,7 +81,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 16,
               ),
               Text(
-                AppLocalizations.of(context)!.selectDate,
+                'Select date',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w400,
                       color: AppTheme.black,
@@ -88,7 +95,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   DateTime? dateTime = await showDatePicker(
                     context: context,
                     initialDate: selectedDate,
-                    firstDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(const Duration(
+                      days: 30,
+                    )),
                     lastDate: DateTime.now().add(
                       const Duration(days: 365),
                     ),
@@ -96,6 +105,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   );
                   if (dateTime != null) {
                     selectedDate = dateTime;
+                    task.date = dateTime;
                     setState(() {});
                   }
                 },
@@ -111,18 +121,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 32,
               ),
               DeafaultElevetedBotton(
-<<<<<<< HEAD
-                  label: AppLocalizations.of(context)!.submit,
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) addTask();
-                  }),
-=======
                 label: 'Submit',
                 onPressed: () {
-                  if (formKey.currentState!.validate()) addTask();
+                  editTask();
                 },
               ),
->>>>>>> feature/edit-task
             ],
           ),
         ),
@@ -130,42 +133,27 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void addTask() {
-    FirebaseFunctions.addTaskToFirestore(
+  void editTask() {
+    FirebaseFunctions.updateTaskInFirestore(
       taskModel: TaskModel(
-        title: titleController.text,
-        description: descriptionController.text,
-        date: selectedDate,
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        date: task.date,
       ),
     ).timeout(
       const Duration(microseconds: 500),
       onTimeout: () {
         Navigator.of(context).pop();
         Provider.of<TasksProvider>(context, listen: false).getTasks();
-<<<<<<< HEAD
-        Fluttertoast.showToast(
-          msg: "Task Added Successfuly!",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: AppTheme.green,
-          textColor: AppTheme.white,
-          fontSize: 16.0,
-        );
-=======
->>>>>>> feature/edit-task
         print('Task added');
+        print('/////////////////////////////////////////////');
       },
     ).catchError(
-      (_) {
-        Fluttertoast.showToast(
-          msg: "Somthing Went Worng!",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: AppTheme.red,
-          textColor: AppTheme.white,
-          fontSize: 16.0,
-        );
+      (e) {
         print('error');
+        print(e);
+        print('/////////////////////////////////////////////');
       },
     );
   }

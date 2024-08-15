@@ -1,7 +1,12 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+<<<<<<< HEAD
 import 'package:todo_app/app_theme.dart';
+=======
+import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/tabs/tasks/edit_task_screen.dart';
+>>>>>>> feature/edit-task
 import 'package:todo_app/tabs/tasks/task_item.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -88,13 +93,24 @@ class TasksTab extends StatelessWidget {
           ],
         ),
         Expanded(
-            child: ListView.builder(
-          padding: const EdgeInsets.only(top: 16),
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (_, index) =>
-              TaskItem(taskModel: tasksProvider.tasks[index]),
-          itemCount: tasksProvider.tasks.length,
-        ))
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 16),
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (_, index) => TaskItem(
+              taskModel: tasksProvider.tasks[index],
+              onTap: () async {
+                TaskModel taskModel = await tasksProvider
+                    .getTaskById(tasksProvider.tasks[index].id);
+                Navigator.pushNamed(
+                  _,
+                  EditTaskScreen.routeName,
+                  arguments: taskModel,
+                );
+              },
+            ),
+            itemCount: tasksProvider.tasks.length,
+          ),
+        )
       ],
     );
   }
