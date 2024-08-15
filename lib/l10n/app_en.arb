@@ -1,0 +1,13 @@
+{ 
+    "toDo": "ToDo List",
+    "settings": "Settings",
+    "mode": "Mode",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "addTask": "Add new task",
+    "enterTitle": "Enter task title",
+    "enterDesc": "Enter task description",
+    "selectDate": "Select date",
+    "submit": "Submit"
+}

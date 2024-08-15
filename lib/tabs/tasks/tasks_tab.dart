@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
 import 'package:todo_app/tabs/tasks/task_item.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TasksTab extends StatelessWidget {
   const TasksTab({super.key});
@@ -24,7 +25,7 @@ class TasksTab extends StatelessWidget {
               start: 25,
               top: 60,
               child: Text(
-                'ToDo List',
+                AppLocalizations.of(context)!.toDo,
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       color: AppTheme.white,
                       fontSize: 22,

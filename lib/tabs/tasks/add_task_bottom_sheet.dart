@@ -8,6 +8,8 @@ import 'package:todo_app/tabs/tasks/deafault_elevated_botton.dart';
 import 'package:todo_app/tabs/tasks/deafult_text_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
@@ -34,7 +36,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           child: Column(
             children: [
               Text(
-                'Add new task',
+                AppLocalizations.of(context)!.addTask,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppTheme.backgroundDark,
                     ),
@@ -44,7 +46,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               ),
               DefaultTextFormField(
                 controller: titleController,
-                hintText: 'Enter task title',
+                hintText: AppLocalizations.of(context)!.enterTitle,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'title can not be empty';
@@ -58,7 +60,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               ),
               DefaultTextFormField(
                 controller: descriptionController,
-                hintText: 'Enter task description',
+                hintText: AppLocalizations.of(context)!.enterDesc,
                 maxLines: 5,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -72,7 +74,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 16,
               ),
               Text(
-                'Select date',
+                AppLocalizations.of(context)!.selectDate,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w400,
                       color: AppTheme.black,
@@ -109,7 +111,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 32,
               ),
               DeafaultElevetedBotton(
-                  label: 'Submit',
+                  label: AppLocalizations.of(context)!.submit,
                   onPressed: () {
                     if (formKey.currentState!.validate()) addTask();
                   }),
