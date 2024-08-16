@@ -111,18 +111,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 height: 32,
               ),
               DeafaultElevetedBotton(
-<<<<<<< HEAD
                   label: AppLocalizations.of(context)!.submit,
                   onPressed: () {
                     if (formKey.currentState!.validate()) addTask();
                   }),
-=======
-                label: 'Submit',
-                onPressed: () {
-                  if (formKey.currentState!.validate()) addTask();
-                },
-              ),
->>>>>>> feature/edit-task
             ],
           ),
         ),
@@ -142,7 +134,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       onTimeout: () {
         Navigator.of(context).pop();
         Provider.of<TasksProvider>(context, listen: false).getTasks();
-<<<<<<< HEAD
         Fluttertoast.showToast(
           msg: "Task Added Successfuly!",
           toastLength: Toast.LENGTH_SHORT,
@@ -151,8 +142,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           textColor: AppTheme.white,
           fontSize: 16.0,
         );
-=======
->>>>>>> feature/edit-task
         print('Task added');
       },
     ).catchError(

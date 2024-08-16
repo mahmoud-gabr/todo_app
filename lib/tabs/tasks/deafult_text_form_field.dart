@@ -25,15 +25,10 @@ class DefaultTextFormField extends StatelessWidget {
       onChanged: onChanged,
       maxLines: maxLines,
       validator: validator,
-<<<<<<< HEAD
       style: Theme.of(context).textTheme.titleMedium!.copyWith(
             color: AppTheme.black,
             fontWeight: FontWeight.w400,
           ),
-=======
-      initialValue: intialValue,
-      style: Theme.of(context).textTheme.titleLarge,
->>>>>>> feature/edit-task
     );
   }
 }
