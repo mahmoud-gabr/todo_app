@@ -26,109 +26,140 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     task = ModalRoute.of(context)?.settings.arguments as TaskModel;
     selectedDate = task.date;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('To Do List'),
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        color: AppTheme.white,
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Text(
-                'Edit task',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppTheme.black,
-                    ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              DefaultTextFormField(
-                hintText: 'Enter task title',
-                intialValue: task.title,
-                onChanged: (value) {
-                  task.title = value;
-                },
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Title cannot be empty';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              DefaultTextFormField(
-                hintText: 'Enter task description',
-                intialValue: task.description,
-                onChanged: (value) {
-                  task.description = value;
-                },
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'description can not be empty';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text(
-                'Select date',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.black,
-                    ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              InkWell(
-                onTap: () async {
-                  DateTime? dateTime = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDate,
-                    firstDate: DateTime.now().subtract(const Duration(
-                      days: 30,
-                    )),
-                    lastDate: DateTime.now().add(
-                      const Duration(days: 365),
-                    ),
-                    initialEntryMode: DatePickerEntryMode.calendarOnly,
-                  );
-                  if (dateTime != null) {
-                    selectedDate = dateTime;
-                    task.date = dateTime;
-                    setState(() {});
-                  }
-                },
-                child: Text(
-                  dateFormat.format(selectedDate),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.black,
-                      ),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * .19,
+            color: Theme.of(context).primaryColor,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppTheme.white,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              DeafaultElevetedBotton(
-                label: 'Submit',
-                onPressed: () {
-                  editTask();
-                },
-              ),
-            ],
+                Text('ToDo List'),
+              ],
+            ),
           ),
-        ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            margin: const EdgeInsets.only(
+              right: 16,
+              left: 16,
+              top: 120,
+              bottom: 80,
+            ),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Text(
+                    'Edit task',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: AppTheme.black,
+                        ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  DefaultTextFormField(
+                    hintText: 'Enter task title',
+                    intialValue: task.title,
+                    onChanged: (value) {
+                      task.title = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Title cannot be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  DefaultTextFormField(
+                    hintText: 'Enter task description',
+                    intialValue: task.description,
+                    onChanged: (value) {
+                      task.description = value;
+                    },
+                    maxLines: 5,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'description can not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                    'Select date',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.black,
+                        ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      DateTime? dateTime = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime.now().subtract(const Duration(
+                          days: 30,
+                        )),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 365),
+                        ),
+                        initialEntryMode: DatePickerEntryMode.calendarOnly,
+                      );
+                      if (dateTime != null) {
+                        selectedDate = dateTime;
+                        task.date = dateTime;
+                        setState(() {});
+                      }
+                    },
+                    child: Text(
+                      dateFormat.format(selectedDate),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppTheme.black,
+                          ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 120,
+                  ),
+                  SizedBox(
+                    width: 255,
+                    child: DeafaultElevetedBotton(
+                      label: 'Submit',
+                      onPressed: () {
+                        editTask();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
