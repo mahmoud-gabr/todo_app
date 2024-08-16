@@ -26,11 +26,11 @@ class FirebaseFunctions {
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList();
   }
 
-
   static Future<void> deleteTaskFromFirestore(String taskId) async {
     CollectionReference<TaskModel> taskCollection = getTasksCollection();
     return taskCollection.doc(taskId).delete();
   }
+
   static Future<TaskModel> getTaskById(String taskId) async {
     CollectionReference<TaskModel> tasksCollection = getTasksCollection();
     DocumentSnapshot<TaskModel> docSnapshot =
@@ -43,7 +43,25 @@ class FirebaseFunctions {
     CollectionReference<TaskModel> tasksCollection = getTasksCollection();
     DocumentReference<TaskModel> docRef = tasksCollection.doc(taskModel.id);
     await docRef.update(taskModel.toJson());
+  }
 
+  static Future<bool> getIsDoneStatus(String taskId) async {
+    CollectionReference<TaskModel> tasksCollection = getTasksCollection();
+    DocumentSnapshot<TaskModel> docSnapshot =
+        await tasksCollection.doc(taskId).get();
+    bool isDone = docSnapshot.get('isDone');
+    return isDone;
+  }
+
+  static Future<void> updateIsDoneStatus(
+    String taskId,
+    bool isDone,
+  ) async {
+    CollectionReference<TaskModel> tasksCollection = getTasksCollection();
+    await tasksCollection.doc(taskId).update(
+      {
+        'isDone': isDone,
+      },
+    );
   }
 }
-

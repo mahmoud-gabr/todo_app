@@ -8,14 +8,19 @@ import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 
 class TaskItem extends StatelessWidget {
-  const TaskItem(
-      {super.key,
-      required this.taskModel,
-      required this.onTap,
-      required this.color});
+  const TaskItem({
+    super.key,
+    required this.taskModel,
+    required this.onTap,
+    required this.color,
+    required this.isDone,
+    required this.isDoneTap,
+  });
   final TaskModel taskModel;
   final VoidCallback onTap;
   final Color color;
+  final bool isDone;
+  final VoidCallback isDoneTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -91,7 +96,9 @@ class TaskItem extends StatelessWidget {
                     margin: const EdgeInsetsDirectional.only(end: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).primaryColor,
+                      color: isDone
+                          ? AppTheme.green
+                          : Theme.of(context).primaryColor,
                     ),
                   ),
                   Column(
@@ -99,7 +106,10 @@ class TaskItem extends StatelessWidget {
                     children: [
                       Text(
                         taskModel.title,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: isDone ? AppTheme.green : null,
+                                ),
                       ),
                       Text(
                         taskModel.description,
@@ -112,18 +122,32 @@ class TaskItem extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Container(
-                    width: 69,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ImageIcon(
-                      const AssetImage('assets/images/Icon-check.png'),
-                      size: 34,
-                      color: AppTheme.white,
-                    ),
+                  InkWell(
+                    onTap: isDoneTap,
+                    child: isDone
+                        ? Text(
+                            'Done!',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: AppTheme.green,
+                                  fontSize: 22,
+                                ),
+                          )
+                        : Container(
+                            width: 69,
+                            height: 34,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ImageIcon(
+                              const AssetImage('assets/images/Icon-check.png'),
+                              size: 34,
+                              color: AppTheme.white,
+                            ),
+                          ),
                   )
                 ],
               ),

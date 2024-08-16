@@ -2,6 +2,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/settings/settings_provider.dart';
 import 'package:todo_app/tabs/tasks/edit_task_screen.dart';
@@ -9,11 +10,19 @@ import 'package:todo_app/tabs/tasks/task_item.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class TasksTab extends StatelessWidget {
+class TasksTab extends StatefulWidget {
   const TasksTab({super.key});
+
+  @override
+  State<TasksTab> createState() => _TasksTabState();
+}
+
+class _TasksTabState extends State<TasksTab> {
+  late TasksProvider tasksProvider;
+  late bool isDone;
   @override
   Widget build(BuildContext context) {
-    TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
@@ -115,24 +124,41 @@ class TasksTab extends StatelessWidget {
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 16),
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (_, index) => TaskItem(
-              color: settingsProvider.isDark
-                  ? AppTheme.backgroundItemDark
-                  : AppTheme.white,
-              taskModel: tasksProvider.tasks[index],
-              onTap: () async {
-                TaskModel taskModel = await tasksProvider
-                    .getTaskById(tasksProvider.tasks[index].id);
-                Navigator.of(context).pushNamed(
-                  EditTaskScreen.routeName,
-                  arguments: taskModel,
-                );
-              },
-            ),
+            itemBuilder: (_, index) {
+              getTaskStatus(tasksProvider.tasks[index].id);
+              return TaskItem(
+                isDone: isDone,
+                isDoneTap: () {
+                  changTaskStatus(tasksProvider.tasks[index].id, !isDone);
+                },
+                color: settingsProvider.isDark
+                    ? AppTheme.backgroundItemDark
+                    : AppTheme.white,
+                taskModel: tasksProvider.tasks[index],
+                onTap: () async {
+                  TaskModel taskModel = await tasksProvider
+                      .getTaskById(tasksProvider.tasks[index].id);
+                  Navigator.of(context).pushNamed(
+                    EditTaskScreen.routeName,
+                    arguments: taskModel,
+                  );
+                },
+              );
+            },
             itemCount: tasksProvider.tasks.length,
           ),
         )
       ],
     );
+  }
+
+  void getTaskStatus(String taskId) async {
+    isDone = await tasksProvider.getIsDoneStatus(taskId);
+  }
+
+  void changTaskStatus(String taskId, bool isDone) {
+    FirebaseFunctions.updateIsDoneStatus(taskId, isDone);
+
+    setState(() {});
   }
 }
