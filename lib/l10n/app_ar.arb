@@ -9,5 +9,6 @@
     "enterTitle": "ادخل عنوان المهمه",
     "enterDesc": "ادخل الوصف",
     "selectDate": "اختر التاريخ",
-    "submit": "اضف"
+    "submit": "اضف",
+    "editTask": "عدل المهة"
 }

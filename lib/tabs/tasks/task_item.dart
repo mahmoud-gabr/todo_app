@@ -13,7 +13,10 @@ class TaskItem extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    return Container(
+   
+     return GestureDetector(
+      onTap: onTap,
+    child: Container(
       margin: const EdgeInsets.symmetric(
         horizontal: 12,
         vertical: 8,
@@ -117,6 +120,6 @@ class TaskItem extends StatelessWidget {
               ],
             ),
           )),
-    );
+     ),);
   }
 }

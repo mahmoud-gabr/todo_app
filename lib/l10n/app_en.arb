@@ -9,5 +9,6 @@
     "enterTitle": "Enter task title",
     "enterDesc": "Enter task description",
     "selectDate": "Select date",
-    "submit": "Submit"
+    "submit": "Submit",
+    "editTask": "Edit Task"
 }

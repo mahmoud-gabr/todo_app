@@ -5,12 +5,12 @@ class DefaultTextFormField extends StatelessWidget {
   const DefaultTextFormField({
     super.key,
      this.controller,
-    required this.hintText,
+     this.hintText,
     this.maxLines,
     this.validator, this.intialValue,  this.onChanged,
   });
   final TextEditingController? controller;
-  final String hintText;
+  final String? hintText;
   final int? maxLines;
   final String? Function(String?)? validator;
   final String? intialValue;
@@ -25,6 +25,7 @@ class DefaultTextFormField extends StatelessWidget {
       onChanged: onChanged,
       maxLines: maxLines,
       validator: validator,
+      initialValue: intialValue,
       style: Theme.of(context).textTheme.titleMedium!.copyWith(
             color: AppTheme.black,
             fontWeight: FontWeight.w400,
