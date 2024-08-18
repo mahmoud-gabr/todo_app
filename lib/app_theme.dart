@@ -12,10 +12,18 @@ class AppTheme {
   static Color red = const Color(0xFFEC4B4B);
   static Color black = const Color(0xFF000000);
 
-
   static ThemeData lightTheme = ThemeData(
     primaryColor: primary,
     scaffoldBackgroundColor: backgroundLight,
+    appBarTheme: AppBarTheme(
+      color: Colors.transparent,
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: black,
+        fontSize: 24,
+      ),
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: white,
       type: BottomNavigationBarType.fixed,
@@ -59,10 +67,24 @@ class AppTheme {
         ),
       ),
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primary,
+      ),
+    ),
   );
   static ThemeData darkTheme = ThemeData(
-     primaryColor: primary,
+    primaryColor: primary,
     scaffoldBackgroundColor: backgroundDark,
+    appBarTheme: AppBarTheme(
+      color: Colors.transparent,
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: white,
+        fontSize: 24,
+      ),
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: backgroundItemDark,
       type: BottomNavigationBarType.fixed,
@@ -104,6 +126,11 @@ class AppTheme {
           fontWeight: FontWeight.w400,
           color: white,
         ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primary,
       ),
     ),
   );

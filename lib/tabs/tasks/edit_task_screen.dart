@@ -80,7 +80,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    DefaultTextFormField(
+                    DeafaultTextFormField(
                       intialValue: task.title,
                       onChanged: (value) {
                         task.title = value;
@@ -96,7 +96,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    DefaultTextFormField(
+                    DeafaultTextFormField(
                       intialValue: task.description,
                       onChanged: (value) {
                         task.description = value;
