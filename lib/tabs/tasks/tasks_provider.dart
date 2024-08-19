@@ -6,9 +6,9 @@ class TasksProvider with ChangeNotifier {
   List<TaskModel> tasks = [];
   DateTime selectedDate = DateTime.now();
 
-  Future<void> getTasks() async {
+  Future<void> getTasks(String userId) async {
     List<TaskModel> allTasks =
-        await FirebaseFunctions.getAllTasksFromFirebase();
+        await FirebaseFunctions.getAllTasksFromFirebase(userId);
     tasks = allTasks
         .where(
           (task) =>
@@ -25,11 +25,11 @@ class TasksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<TaskModel> getTaskById(String taskId) async {
-    return await FirebaseFunctions.getTaskById(taskId);
+  Future<TaskModel> getTaskById(String taskId, String userId) async {
+    return await FirebaseFunctions.getTaskById(taskId, userId);
   }
 
-  Future<bool> getIsDoneStatus(String taskId) async {
-    return await FirebaseFunctions.getIsDoneStatus(taskId);
+  Future<bool> getIsDoneStatus(String taskId, String userId) async {
+    return await FirebaseFunctions.getIsDoneStatus(taskId: taskId, userId: userId);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/tasks_provider.dart';
@@ -35,13 +36,17 @@ class TaskItem extends StatelessWidget {
               motion: const ScrollMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) {
-                    FirebaseFunctions.deleteTaskFromFirestore(taskModel.id)
-                        .timeout(
-                      const Duration(microseconds: 500),
-                      onTimeout: () {
+                  onPressed: (_) {
+                    final userId =
+                        Provider.of<UserProvider>(context, listen: false)
+                            .currentUser!
+                            .id;
+                    FirebaseFunctions.deleteTaskFromFirestore(
+                            taskModel.id, userId)
+                        .then(
+                      ((_) {
                         Provider.of<TasksProvider>(context, listen: false)
-                            .getTasks();
+                            .getTasks(userId);
                         Fluttertoast.showToast(
                           msg: "Task Deleted Successfuly!",
                           toastLength: Toast.LENGTH_SHORT,
@@ -50,7 +55,7 @@ class TaskItem extends StatelessWidget {
                           textColor: AppTheme.white,
                           fontSize: 16.0,
                         );
-                      },
+                      }),
                     ).catchError(
                       (error) {
                         Fluttertoast.showToast(
@@ -61,7 +66,8 @@ class TaskItem extends StatelessWidget {
                           textColor: AppTheme.white,
                           fontSize: 16.0,
                         );
-                        print(error);
+                       
+                        
                       },
                     );
                   },

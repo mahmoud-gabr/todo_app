@@ -10,5 +10,6 @@
     "enterDesc": "ادخل الوصف",
     "selectDate": "اختر التاريخ",
     "submit": "اضف",
-    "editTask": "عدل المهة"
+    "editTask": "عدل المهة",
+    "logout": "تسجيل خروج"
 }

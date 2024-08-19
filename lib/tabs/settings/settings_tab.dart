@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/user_provider.dart';
+import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/tabs/settings/settings_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({super.key});
@@ -145,6 +148,41 @@ class SettingsTab extends StatelessWidget {
               },
             ),
           ),
+          const SizedBox(
+            height: 17,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.logout,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: settingsProvider.isDark ? AppTheme.white : null,
+                      ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    FirebaseFunctions.logout();
+                    Provider.of<TasksProvider>(context, listen: false)
+                        .tasks
+                        .clear();
+                    Provider.of<UserProvider>(context, listen: false)
+                        .currentUser = null;
+                  },
+                  icon: Icon(
+                    Icons.logout_outlined,
+                    color: settingsProvider.isDark
+                        ? AppTheme.white
+                        : AppTheme.black,
+                    size: 34,
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

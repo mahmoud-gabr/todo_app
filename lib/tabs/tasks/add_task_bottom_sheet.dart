@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/deafault_elevated_botton.dart';
@@ -122,17 +123,19 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() {
+    final userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
     FirebaseFunctions.addTaskToFirestore(
       taskModel: TaskModel(
         title: titleController.text,
         description: descriptionController.text,
         date: selectedDate,
       ),
-    ).timeout(
-      const Duration(microseconds: 500),
-      onTimeout: () {
+      userId: userId,
+    ).then(
+      (_) {
         Navigator.of(context).pop();
-        Provider.of<TasksProvider>(context, listen: false).getTasks();
+        Provider.of<TasksProvider>(context, listen: false).getTasks(userId);
         Fluttertoast.showToast(
           msg: "Task Added Successfuly!",
           toastLength: Toast.LENGTH_SHORT,
@@ -141,7 +144,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           textColor: AppTheme.white,
           fontSize: 16.0,
         );
-        print('Task added');
       },
     ).catchError(
       (_) {
@@ -153,7 +155,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           textColor: AppTheme.white,
           fontSize: 16.0,
         );
-        print('error');
       },
     );
   }

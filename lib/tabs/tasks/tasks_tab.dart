@@ -2,6 +2,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/settings/settings_provider.dart';
@@ -20,11 +21,18 @@ class TasksTab extends StatefulWidget {
 class _TasksTabState extends State<TasksTab> {
   late TasksProvider tasksProvider;
   late bool isDone;
+  late String userId;
+  bool shouldGetTasks = true;
   @override
   Widget build(BuildContext context) {
     tasksProvider = Provider.of<TasksProvider>(context);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     double screenHeight = MediaQuery.of(context).size.height;
+    if (shouldGetTasks == true) {
+      tasksProvider.getTasks(userId);
+      userId =
+          Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    }
     return Column(
       children: [
         Stack(
@@ -60,7 +68,7 @@ class _TasksTabState extends State<TasksTab> {
                 ),
                 onDateChange: (selectedDate) {
                   tasksProvider.changeSelectedDate(selectedDate);
-                  tasksProvider.getTasks();
+                  tasksProvider.getTasks(userId);
                 },
                 activeColor: settingsProvider.isDark
                     ? AppTheme.backgroundDark
@@ -136,8 +144,8 @@ class _TasksTabState extends State<TasksTab> {
                     : AppTheme.white,
                 taskModel: tasksProvider.tasks[index],
                 onTap: () async {
-                  TaskModel taskModel = await tasksProvider
-                      .getTaskById(tasksProvider.tasks[index].id);
+                  TaskModel taskModel = await tasksProvider.getTaskById(
+                      tasksProvider.tasks[index].id, userId);
                   Navigator.of(context).pushNamed(
                     EditTaskScreen.routeName,
                     arguments: taskModel,
@@ -153,11 +161,15 @@ class _TasksTabState extends State<TasksTab> {
   }
 
   void getTaskStatus(String taskId) async {
-    isDone = await tasksProvider.getIsDoneStatus(taskId);
+    isDone = await tasksProvider.getIsDoneStatus(taskId, userId);
   }
 
   void changTaskStatus(String taskId, bool isDone) {
-    FirebaseFunctions.updateIsDoneStatus(taskId, isDone);
+    FirebaseFunctions.updateIsDoneStatus(
+      isDone: isDone,
+      userId: userId,
+      taskId: taskId,
+    );
 
     setState(() {});
   }

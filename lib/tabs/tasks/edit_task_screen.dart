@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/tasks/deafault_elevated_botton.dart';
@@ -174,6 +175,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   }
 
   void editTask() {
+    final userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
     FirebaseFunctions.updateTaskInFirestore(
       taskModel: TaskModel(
         id: task.id,
@@ -181,20 +184,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         description: task.description,
         date: task.date,
       ),
-    ).timeout(
-      const Duration(microseconds: 500),
-      onTimeout: () {
+      userId: userId,
+    ).then(
+      ((_) {
         Navigator.of(context).pop();
-        Provider.of<TasksProvider>(context, listen: false).getTasks();
-        print('Task added');
-        print('/////////////////////////////////////////////');
-      },
+        Provider.of<TasksProvider>(context, listen: false).getTasks(userId);
+      }),
     ).catchError(
-      (e) {
-        print('error');
-        print(e);
-        print('/////////////////////////////////////////////');
-      },
+      (e) {},
     );
   }
 }

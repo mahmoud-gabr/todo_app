@@ -10,5 +10,7 @@
     "enterDesc": "Enter task description",
     "selectDate": "Select date",
     "submit": "Submit",
-    "editTask": "Edit Task"
+    "editTask": "Edit Task",
+    "logout": "Logout"
+
 }
