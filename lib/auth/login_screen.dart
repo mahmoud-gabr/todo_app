@@ -70,9 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: login,
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(context).pushReplacementNamed(
-                    RegisterScreen.routeName,
-                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(
+                      RegisterScreen.routeName,
+                    );
+                  },
                   child: const Text('Don\'t have an account!'),
                 ),
               ],
@@ -90,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordControler.text.trim(),
       ).then((user) {
         Provider.of<UserProvider>(context, listen: false).updateUser(user);
+        
         Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         Fluttertoast.showToast(
           msg: "You Login Successfuly!",

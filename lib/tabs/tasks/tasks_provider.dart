@@ -25,11 +25,4 @@ class TasksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<TaskModel> getTaskById(String taskId, String userId) async {
-    return await FirebaseFunctions.getTaskById(taskId, userId);
-  }
-
-  Future<bool> getIsDoneStatus(String taskId, String userId) async {
-    return await FirebaseFunctions.getIsDoneStatus(taskId: taskId, userId: userId);
-  }
 }

@@ -27,13 +27,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * .56,
-      padding: const EdgeInsets.all(20),
-      child: SingleChildScrollView(
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        height: MediaQuery.of(context).size.height * .56,
+        padding: const EdgeInsets.all(20),
         child: Form(
           key: formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppLocalizations.of(context)!.addTask,

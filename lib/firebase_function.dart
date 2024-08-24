@@ -53,18 +53,9 @@ class FirebaseFunctions {
   static Future<void> updateTaskInFirestore(
       {required TaskModel taskModel, required String userId}) async {
     CollectionReference<TaskModel> tasksCollection =
-        getTasksCollection(taskModel.id);
+        getTasksCollection(userId);
     DocumentReference<TaskModel> docRef = tasksCollection.doc(taskModel.id);
     await docRef.update(taskModel.toJson());
-  }
-
-  static Future<bool> getIsDoneStatus(
-      {required String taskId, required String userId}) async {
-    CollectionReference<TaskModel> tasksCollection = getTasksCollection(userId);
-    DocumentSnapshot<TaskModel> docSnapshot =
-        await tasksCollection.doc(taskId).get();
-    bool isDone = docSnapshot.get('isDone');
-    return isDone;
   }
 
   static Future<void> updateIsDoneStatus({

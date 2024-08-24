@@ -191,7 +191,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         Provider.of<TasksProvider>(context, listen: false).getTasks(userId);
       }),
     ).catchError(
-      (e) {},
+      (e) {
+        
+      },
     );
   }
 }

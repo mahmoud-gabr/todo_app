@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
 import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
-import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/tabs/settings/settings_provider.dart';
 import 'package:todo_app/tabs/tasks/edit_task_screen.dart';
 import 'package:todo_app/tabs/tasks/task_item.dart';
@@ -29,9 +28,9 @@ class _TasksTabState extends State<TasksTab> {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     double screenHeight = MediaQuery.of(context).size.height;
     if (shouldGetTasks == true) {
-      tasksProvider.getTasks(userId);
       userId =
           Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+      tasksProvider.getTasks(userId);
     }
     return Column(
       children: [
@@ -133,22 +132,25 @@ class _TasksTabState extends State<TasksTab> {
             padding: const EdgeInsets.only(top: 16),
             physics: const BouncingScrollPhysics(),
             itemBuilder: (_, index) {
-              getTaskStatus(tasksProvider.tasks[index].id);
               return TaskItem(
-                isDone: isDone,
+                isDone: tasksProvider.tasks[index].isDone,
                 isDoneTap: () {
-                  changTaskStatus(tasksProvider.tasks[index].id, !isDone);
+                  FirebaseFunctions.updateIsDoneStatus(
+                    taskId: tasksProvider.tasks[index].id,
+                    isDone: !tasksProvider.tasks[index].isDone,
+                    userId: userId,
+                  );
                 },
                 color: settingsProvider.isDark
                     ? AppTheme.backgroundItemDark
                     : AppTheme.white,
                 taskModel: tasksProvider.tasks[index],
-                onTap: () async {
-                  TaskModel taskModel = await tasksProvider.getTaskById(
-                      tasksProvider.tasks[index].id, userId);
+                onTap: () {
+                  // TaskModel taskModel = await tasksProvider.getTaskById(
+                  //     tasksProvider.tasks[index].id, userId);
                   Navigator.of(context).pushNamed(
                     EditTaskScreen.routeName,
-                    arguments: taskModel,
+                    arguments: tasksProvider.tasks[index],
                   );
                 },
               );
@@ -160,9 +162,6 @@ class _TasksTabState extends State<TasksTab> {
     );
   }
 
-  void getTaskStatus(String taskId) async {
-    isDone = await tasksProvider.getIsDoneStatus(taskId, userId);
-  }
 
   void changTaskStatus(String taskId, bool isDone) {
     FirebaseFunctions.updateIsDoneStatus(

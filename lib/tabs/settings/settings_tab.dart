@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/app_theme.dart';
+import 'package:todo_app/auth/login_screen.dart';
 import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/tabs/settings/settings_provider.dart';
@@ -166,6 +167,8 @@ class SettingsTab extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     FirebaseFunctions.logout();
+                    Navigator.of(context)
+                        .pushReplacementNamed(LoginScreen.routeName);
                     Provider.of<TasksProvider>(context, listen: false)
                         .tasks
                         .clear();
