@@ -6,7 +6,6 @@ import 'package:todo_app/app_theme.dart';
 import 'package:todo_app/auth/user_provider.dart';
 import 'package:todo_app/firebase_function.dart';
 import 'package:todo_app/models/task_model.dart';
-import 'package:todo_app/tabs/tasks/tasks_provider.dart';
 
 class TaskItem extends StatelessWidget {
   const TaskItem({
@@ -43,21 +42,19 @@ class TaskItem extends StatelessWidget {
                             .id;
                     FirebaseFunctions.deleteTaskFromFirestore(
                             taskModel.id, userId)
-                        .then(
-                      ((_) {
-                        Provider.of<TasksProvider>(context, listen: false)
-                            .getTasks(userId);
-                        Fluttertoast.showToast(
-                          msg: "Task Deleted Successfuly!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: AppTheme.green,
-                          textColor: AppTheme.white,
-                          fontSize: 16.0,
-                        );
-                      }),
-                    ).catchError(
+                        .then((_) {
+                      
+                      Fluttertoast.showToast(
+                        msg: "Task Deleted Successfuly!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppTheme.green,
+                        textColor: AppTheme.white,
+                        fontSize: 16.0,
+                      );
+                    }).catchError(
                       (error) {
+                        
                         Fluttertoast.showToast(
                           msg: "Somthing Went Worng!",
                           toastLength: Toast.LENGTH_SHORT,
@@ -66,8 +63,6 @@ class TaskItem extends StatelessWidget {
                           textColor: AppTheme.white,
                           fontSize: 16.0,
                         );
-                       
-                        
                       },
                     );
                   },
